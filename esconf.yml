@@ -1,0 +1,25 @@
+# Example Test File for filesystem config emulation
+
+#Node names are generated dynamically on startup, so you're relieved
+# from configuring them manually. You can tie this node to a specific name:
+#
+node.name: "ELK1"
+
+# Every node can be configured to allow or deny being eligible as the master,
+# and to allow or deny to store the data.
+#
+# Allow this node to be eligible as a master node (enabled by default):
+#
+node.master: true
+#
+# Allow this node to store data (enabled by default):
+#
+node.data: true
+
+# You can exploit these settings to design advanced cluster topologies.
+#
+# 1. You want this node to never become a master node, only to hold data.
+#    This will be the "workhorse" of your cluster.
+#
+#node.master: false
+#node.data: true
