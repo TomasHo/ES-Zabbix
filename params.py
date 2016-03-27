@@ -117,5 +117,5 @@ def par_gen(data, sep='-', filename='par'):
             parameters.append(k)
 
     with open(filename+'.json', 'w+') as par_file:
-        json.dump(dict(zip(range(1, len(parameters) + 1), sorted(parameters))), par_file)
+        json.dump(dict(zip(range(1, len(parameters) + 1), sorted(parameters))), par_file, sort_keys=True, indent="")
 
