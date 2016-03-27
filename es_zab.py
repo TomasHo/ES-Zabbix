@@ -1,6 +1,7 @@
 import re
 import sys
 import requests
+import json
 from ast import literal_eval
 from params import par_gen
 from pprint import pprint as pp
@@ -15,8 +16,11 @@ def es_nodename():
     except:
         print("Link to Elastic config file is BAD or missing")
 
-
-node_url = 'http://my.server.com:9200/_nodes/%s/stats/_all' % es_nodename()
+try:
+    node_url = 'http://my.server.com:9200/_nodes/%s/stats/_all' % sys.argv[2]
+except :
+    print('Arguments missing, default usage: $python es_zab.py -node (nodename) -param (int)')
+    node_url = 'http://my.server.com:9200/_nodes/%s/stats/_all' % es_nodename()
 
 try:
     r = requests.get(node_url, auth=('admin', 'admin'))  # , timeout=(3, 10))
@@ -39,9 +43,9 @@ except:
 
 
 def main(sep="-", *args, **kwargs):
-    par_gen(cluster_state, filename='cluster_state', sep=sep)
-
-    par_gen(cluster_stats, filename='cluster_stats', sep=sep)
+    # par_gen(cluster_state, filename='cluster_state', sep=sep)
+    #
+    # par_gen(cluster_stats, filename='cluster_stats', sep=sep)
 
     par_gen(node_stats, filename='node_stats', sep=sep)
 
@@ -60,14 +64,15 @@ def get_value(source, par_num=0, par_name=None, sep='-'):
     """
 
     with open(source + '.json', mode='r') as f:
-        g = f.read()
-        x = literal_eval(g)  # x = file conversion to dict
+        g = json.load(f)
+        # g = f.read()
+        # x = literal_eval(g)  # x = file conversion to dict
 
         if par_name:
-            return eval(source + conv2key(par_name, sep=sep))
+            print(eval(source + conv2key(par_name, sep=sep)))
 
         else:
-            return eval(source + conv2key(x[par_num], sep=sep))
+            print(eval(source + conv2key(g[par_num], sep=sep)))
 
 
 def conv2key(source_key, sep='-'):
@@ -83,3 +88,4 @@ def conv2key(source_key, sep='-'):
 
 if __name__ == "__main__":
     main()
+    get_value('node_stats', par_num=sys.argv[4])
